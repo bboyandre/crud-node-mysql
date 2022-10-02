@@ -111,7 +111,7 @@ app.post('/books/updatebook', (req, res) => {
     })
 })
 
-app.post('/books/edit/:id', (req, res) => {
+app.post('/books/remove/:id', (req, res) => {
     const id = req.params.id
 
     const sql = `DELETE FROM books WHERE id = ${id}`
