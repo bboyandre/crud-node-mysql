@@ -1,0 +1,15 @@
+<section class="container">
+    <div class="pt-5 pb-3">
+        <a href="/books" class="text-decoration-none">Voltar</a>
+    </div>
+    <div>
+        <h1>{{book.title}}</h1>
+        <p>Este livro tem {{book.pageqty}} páginas.</p>
+        <div class="d-flex justify-content-between">
+            <a type="button" class="btn btn-primary" href="/books/edit/{{book.id}}">Editar</a>
+            <form action="/books/remove/{{book.id}}" method="POST">
+                <input type="submit" class="btn btn-danger" value="Remover">
+            </form>
+        </div>
+    </div>
+</section>

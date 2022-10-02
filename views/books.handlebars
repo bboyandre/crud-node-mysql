@@ -1,0 +1,15 @@
+<section class="container">
+    <div class="pt-5 pb-5">
+        <h1>Livros disponíveis:</h1>
+    </div>
+    <div class="d-flex justify-content-end">
+        <a type="button" class="btn btn-primary" href="/">Adicionar</a>
+    </div>
+    <ul>
+        {{#each books}}
+            <li>
+                #{{ this.id }} - <span class=""><a href="/books/{{this.id}}">{{this.title}}</a></span> - {{ this.pageqty }} páginas
+            </li>
+        {{/each}}
+    </ul>
+</section>
