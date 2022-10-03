@@ -1,6 +1,6 @@
 const express = require('express')
 const exphbs = require('express-handlebars')
-const mysql = require('mysql')
+const pool = require('./db/conn')
 
 const app = express()
 
@@ -25,9 +25,10 @@ app.post('/books/insertbook', (req, res) => {
     const title = req.body.title
     const pageqty = req.body.pageqty
 
-    const sql = `INSERT INTO books (title, pageqty) VALUES ('${title}', '${pageqty}')`
+    const sql = `INSERT INTO books (??, ??) VALUES (?, ?)`
+    data = ['title', 'pageqty', title, pageqty]
 
-    conn.query(sql, (err) => {
+    pool.query(sql, data, (err) => {
         if (err) {
             console.log(err)
             return
@@ -40,7 +41,7 @@ app.post('/books/insertbook', (req, res) => {
 app.get('/books', (req, res) => {
     const sql = 'SELECT * FROM books'
 
-    conn.query(sql, (err, data) => {
+    pool.query(sql, (err, data) => {
         if (err) {
             console.log(err)
             return
@@ -58,9 +59,10 @@ app.get('/books', (req, res) => {
 app.get('/books/:id', (req, res) => {
     const id = req.params.id
 
-    const sql = `SELECT * FROM books WHERE id = ${id}`
+    const sql = `SELECT * FROM books WHERE ?? = ?`
+    data = ['id', id]
 
-    conn.query(sql, (err, data) => {
+    pool.query(sql, data, (err, data) => {
         if (err) {
             console.log(err)
             return
@@ -78,9 +80,10 @@ app.get('/books/:id', (req, res) => {
 app.get('/books/edit/:id', (req, res) => {
     const id = req.params.id
 
-    const sql = `SELECT * FROM books WHERE id = ${id}`
+    const sql = `SELECT * FROM books WHERE ?? = ?`
+    data = ['id', id]
 
-    conn.query(sql, (err, data) => {
+    pool.query(sql, data, (err, data) => {
         if (err) {
             console.log(err)
             return
@@ -99,9 +102,10 @@ app.post('/books/updatebook', (req, res) => {
     const title = req.body.title
     const pageqty = req.body.pageqty
 
-    sql = `UPDATE books SET title = '${title}', pageqty= '${pageqty}' WHERE id = ${id}`
+    sql = `UPDATE books SET ?? = ?, ?? = ? WHERE ?? = ?`
+    data = ['title', title, 'pageqty', pageqty, 'id', id]
 
-    conn.query(sql, (err) => {
+    pool.query(sql, data, (err) => {
         if (err) {
             console.log(err)
             return
@@ -115,8 +119,9 @@ app.post('/books/remove/:id', (req, res) => {
     const id = req.params.id
 
     const sql = `DELETE FROM books WHERE id = ${id}`
+    data = ['id', id]
 
-    conn.query(sql, (err) => {
+    pool.query(sql, data, (err) => {
         if (err) {
             console.log(err)
             return
@@ -126,22 +131,6 @@ app.post('/books/remove/:id', (req, res) => {
     })
 })
 
-const conn = mysql.createConnection({
-    host: '127.0.0.1',
-    user: 'root',
-    password: 'toor',
-    database: 'nodemysql'
-})
-
-conn.connect((err) => {
-    if (err) {
-        console.log(err)
-        return
-    }
-
-    console.log('Conectou ao MySQL!')
-
-    app.listen(3000, () => {
-        console.log('Escutando na porta 3000!')
-    })
+app.listen(3000, () => {
+    console.log('Escutando na porta 3000!')
 })
